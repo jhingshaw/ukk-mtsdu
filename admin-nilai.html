@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Nilai · UKK MTs Darul Ulum</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-soft">
+    <div class="dashboard-container">
+        <header class="admin-header">
+            <div class="header-left">
+                <img src="assets/logo.png" alt="Logo" class="logo-small">
+                <div>
+                    <h2>📝 INPUT NILAI</h2>
+                    <p>UKK MTs Darul Ulum 2026</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <button id="btn-back" class="btn-logout" onclick="window.location.href='admin-cek-kelas.html'">
+                    <i class="fas fa-arrow-left"></i> Kembali
+                </button>
+                <button id="btn-logout-admin" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Keluar
+                </button>
+            </div>
+        </header>
+        
+        <div class="kelola-card">
+            <h3>👤 DATA MURID</h3>
+            <p><strong>Nama:</strong> <span id="nilai-nama">-</span></p>
+            <p><strong>Kelas:</strong> <span id="nilai-kelas">-</span></p>
+            <p><strong>Link Tugas:</strong> <span id="nilai-link">-</span></p>
+            <p><a href="#" id="link-tugas" target="_blank" style="color: #0B3B2C;">🔗 Buka Link</a></p>
+        </div>
+        
+        <div class="kelola-card">
+            <h3>⭐ INPUT NILAI</h3>
+            
+            <div class="input-group">
+                <label for="input-nilai">Nilai (0-100)</label>
+                <input type="number" id="input-nilai" min="0" max="100" step="1" class="kelola-input">
+            </div>
+            
+            <div class="input-group">
+                <label for="input-catatan">Catatan (opsional)</label>
+                <textarea id="input-catatan" rows="3" class="kelola-input" placeholder="Contoh: Bagus, tapi kurang rapi..."></textarea>
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button id="btn-simpan-nilai" class="btn-kelola btn-simpan" style="flex:2;">
+                    💾 SIMPAN NILAI
+                </button>
+                <button id="btn-simpan-next" class="btn-kelola btn-reset" style="flex:1;">
+                    ⏩ SIMPAN & NEXT
+                </button>
+            </div>
+        </div>
+        
+        <footer class="footer-dashboard">
+            <p>developed by mochamad anugrah saputra</p>
+        </footer>
+    </div>
+    
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script>
+        let currentMuridId = '';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cek login
+            if (!sessionStorage.getItem('is_admin')) {
+                window.location.href = 'admin-login.html';
+                return;
+            }
+            
+            // Ambil data dari sessionStorage
+            currentMuridId = sessionStorage.getItem('nilai_murid_id');
+            const nama = sessionStorage.getItem('nilai_nama');
+            const kelas = sessionStorage.getItem('nilai_kelas');
+            const link = sessionStorage.getItem('nilai_link');
+            
+            if (!currentMuridId || !nama) {
+                alert('Data murid tidak ditemukan!');
+                window.location.href = 'admin-cek-kelas.html';
+                return;
+            }
+            
+            // Tampilkan data
+            document.getElementById('nilai-nama').innerText = nama;
+            document.getElementById('nilai-kelas').innerText = kelas;
+            document.getElementById('nilai-link').innerText = link ? link.substring(0, 30) + '...' : '-';
+            document.getElementById('link-tugas').href = link || '#';
+            
+            // Load nilai yang sudah ada (jika edit)
+            loadNilaiExist();
+            
+            // Logout
+            document.getElementById('btn-logout-admin').addEventListener('click', function() {
+                sessionStorage.removeItem('is_admin');
+                window.location.href = 'admin-login.html';
+            });
+            
+            // Button simpan
+            document.getElementById('btn-simpan-nilai').addEventListener('click', () => simpanNilai(false));
+            document.getElementById('btn-simpan-next').addEventListener('click', () => simpanNilai(true));
+        });
+        
+        async function loadNilaiExist() {
+            try {
+                const snapshot = await db.collection('nilai')
+                    .where('murid_id', '==', currentMuridId)
+                    .get();
+                
+                if (!snapshot.empty) {
+                    const data = snapshot.docs[0].data();
+                    document.getElementById('input-nilai').value = data.nilai || '';
+                    document.getElementById('input-catatan').value = data.catatan || '';
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        
+        async function simpanNilai(next = false) {
+            const nilai = parseInt(document.getElementById('input-nilai').value);
+            const catatan = document.getElementById('input-catatan').value.trim();
+            
+            if (isNaN(nilai) || nilai < 0 || nilai > 100) {
+                alert('Nilai harus antara 0-100!');
+                return;
+            }
+            
+            try {
+                // Cek apakah sudah ada nilai sebelumnya
+                const snapshot = await db.collection('nilai')
+                    .where('murid_id', '==', currentMuridId)
+                    .get();
+                
+                const dataNilai = {
+                    murid_id: currentMuridId,
+                    nama: document.getElementById('nilai-nama').innerText,
+                    kelas: document.getElementById('nilai-kelas').innerText,
+                    nilai: nilai,
+                    catatan: catatan || '-',
+                    status: 'sudah',
+                    dinilai_oleh: 'admin',
+                    waktu_dinilai: new Date().toLocaleString('id-ID')
+                };
+                
+                if (snapshot.empty) {
+                    // Tambah baru
+                    await db.collection('nilai').add(dataNilai);
+                } else {
+                    // Update yang lama
+                    await snapshot.docs[0].ref.update(dataNilai);
+                }
+                
+                // Catat log
+                await db.collection('log_aktivitas').add({
+                    aksi: 'nilai',
+                    detail: `Admin menilai ${dataNilai.nama} (${dataNilai.kelas}) = ${nilai}`,
+                    waktu: new Date().toLocaleString('id-ID')
+                });
+                
+                alert('Nilai berhasil disimpan!');
+                
+                if (next) {
+                    // Kembali ke halaman cek kelas
+                    window.location.href = 'admin-cek-kelas.html';
+                } else {
+                    // Refresh halaman
+                    location.reload();
+                }
+                
+            } catch (error) {
+                console.error(error);
+                alert('Gagal menyimpan: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

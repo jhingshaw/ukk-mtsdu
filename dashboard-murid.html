@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Murid · UKK MTs Darul Ulum</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-soft">
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <div class="header-left">
+                <img src="assets/logo.png" alt="Logo" class="logo-small">
+                <div>
+                    <h2>UKK 2026</h2>
+                    <p>MTs Darul Ulum Cimahpar</p>
+                </div>
+            </div>
+            <button id="btn-logout" class="btn-logout">
+                <i class="fas fa-sign-out-alt"></i> Keluar
+            </button>
+        </header>
+        
+        <div class="murid-profile">
+            <div class="profile-card">
+                <i class="fas fa-user-circle profile-icon"></i>
+                <div>
+                    <h3 id="nama-murid">-</h3>
+                    <p id="kelas-murid">Kelas: -</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-kumpul">
+            <h3>📤 Kumpulkan Tugas</h3>
+            <div class="input-group">
+                <label for="link-tugas">
+                    <i class="fab fa-google"></i> Link Google Sheets
+                </label>
+                <input type="url" id="link-tugas" placeholder="https://docs.google.com/spreadsheets/d/...">
+            </div>
+            <button id="btn-kirim-tugas" class="btn-primary">
+                <i class="fas fa-paper-plane"></i> KIRIM TUGAS
+            </button>
+            <div id="notif-kirim" class="notif-success"></div>
+        </div>
+        
+        <div class="riwayat-container">
+            <h3>📋 Riwayat Pengumpulan</h3>
+            <div id="riwayat-list" class="riwayat-list">
+                <!-- Akan diisi JavaScript -->
+                <p class="loading">Memuat riwayat...</p>
+            </div>
+        </div>
+        
+        <footer class="footer-dashboard">
+            <p>developed by mochamad anugrah saputra</p>
+        </footer>
+    </div>
+    
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/murid.js"></script>
+</body>

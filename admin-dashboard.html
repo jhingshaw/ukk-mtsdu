@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard · UKK MTs Darul Ulum</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-soft">
+    <div class="dashboard-container admin-dashboard">
+        <header class="admin-header">
+            <div class="header-left">
+                <img src="assets/logo.png" alt="Logo" class="logo-small">
+                <div>
+                    <h2>👨‍🏫 ADMIN PANEL</h2>
+                    <p>MTs Darul Ulum Cimahpar · UKK 2026</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <span id="waktu-real" class="waktu-real"></span>
+                <button id="btn-logout-admin" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Keluar
+                </button>
+            </div>
+        </header>
+        
+        <!-- Ringkasan Statistik Real-time -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon bg-green"><i class="fas fa-users"></i></div>
+                <div class="stat-info">
+                    <span class="stat-label">Total Murid</span>
+                    <span class="stat-value" id="total-murid">0</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon bg-blue"><i class="fas fa-file-alt"></i></div>
+                <div class="stat-info">
+                    <span class="stat-label">Tugas Masuk</span>
+                    <span class="stat-value" id="total-tugas">0</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon bg-gold"><i class="fas fa-check-circle"></i></div>
+                <div class="stat-info">
+                    <span class="stat-label">Sudah Dinilai</span>
+                    <span class="stat-value" id="sudah-dinilai">0</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Status Per Kelas Real-time -->
+        <div class="section-title">
+            <h3>📊 Status Per Kelas <span class="live-badge">🔴 LIVE</span></h3>
+        </div>
+        
+        <div class="kelas-table-container">
+            <table class="kelas-table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Kelas</th>
+                        <th>Total</th>
+                        <th>Kumpul</th>
+                        <th>Nilai</th>
+                        <th>Progress</th>
+                    </tr>
+                </thead>
+                <tbody id="kelas-status-body">
+                    <!-- Akan diisi JavaScript -->
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Aktivitas Terbaru Real-time -->
+        <div class="section-title">
+            <h3>⚡ Aktivitas Terbaru</h3>
+        </div>
+        
+        <div class="aktivitas-container" id="aktivitas-list">
+            <p class="loading">Memuat aktivitas...</p>
+        </div>
+        
+        <!-- Navigasi Cepat -->
+        <div class="menu-grid">
+            <a href="admin-cek-kelas.html" class="menu-card">
+                <i class="fas fa-search"></i>
+                <span>CEK KELAS</span>
+                <small>Cari & filter murid</small>
+            </a>
+            <a href="admin-rekap.html" class="menu-card">
+                <i class="fas fa-clipboard-list"></i>
+                <span>REKAP NILAI</span>
+                <small>Belum/Sudah direkap</small>
+            </a>
+            <a href="admin-kelola-kelas.html" class="menu-card">
+                <i class="fas fa-cog"></i>
+                <span>KELOLA KELAS</span>
+                <small>Kode akses & statistik</small>
+            </a>
+        </div>
+        
+        <footer class="footer-dashboard">
+            <p>developed by mochamad anugrah saputra · real-time dashboard</p>
+        </footer>
+    </div>
+    
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/admin.js"></script>
+</body>

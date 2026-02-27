@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelola Kelas · UKK MTs Darul Ulum</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .kelola-card {
+            background: #F8F6F0;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .kelola-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .kelola-label {
+            width: 60px;
+            font-weight: 600;
+        }
+        .kelola-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px;
+            border: 2px solid #E0E0E0;
+            border-radius: 12px;
+            font-family: monospace;
+        }
+        .btn-kelola {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-simpan {
+            background: #0B3B2C;
+            color: white;
+        }
+        .btn-reset {
+            background: #C9A227;
+            color: white;
+        }
+        .btn-update-admin {
+            background: #2C3E50;
+            color: white;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .stat-mini-card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            border: 2px solid #0B3B2C;
+        }
+        .stat-mini-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #0B3B2C;
+        }
+        .stat-mini-label {
+            color: #6B6B6B;
+            font-size: 14px;
+        }
+        .kelas-section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 20px 0 10px;
+            color: #0B3B2C;
+        }
+    </style>
+</head>
+<body class="bg-soft">
+    <div class="dashboard-container">
+        <header class="admin-header">
+            <div class="header-left">
+                <img src="assets/logo.png" alt="Logo" class="logo-small">
+                <div>
+                    <h2>⚙️ KELOLA KELAS</h2>
+                    <p>MTs Darul Ulum Cimahpar · UKK 2026</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <button id="btn-back" class="btn-logout" onclick="window.location.href='admin-dashboard.html'">
+                    <i class="fas fa-arrow-left"></i> Kembali
+                </button>
+                <button id="btn-logout-admin" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Keluar
+                </button>
+            </div>
+        </header>
+        
+        <!-- STATISTIK REAL-TIME -->
+        <div style="display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 30px;">
+            <div class="stat-mini-card">
+                <div class="stat-mini-value" id="stat-total-kelas">9</div>
+                <div class="stat-mini-label">Total Kelas</div>
+            </div>
+            <div class="stat-mini-card">
+                <div class="stat-mini-value" id="stat-total-murid">0</div>
+                <div class="stat-mini-label">Total Murid</div>
+            </div>
+            <div class="stat-mini-card">
+                <div class="stat-mini-value" id="stat-terisi">0%</div>
+                <div class="stat-mini-label">Kapasitas Terisi</div>
+            </div>
+        </div>
+        
+        <!-- STATISTIK PER KELAS -->
+        <div class="kelas-section-title">📊 STATISTIK PER KELAS (REAL-TIME)</div>
+        <div class="kelola-card">
+            <table class="kelas-table">
+                <thead>
+                    <tr>
+                        <th>Kelas</th>
+                        <th>Terisi</th>
+                        <th>Progress</th>
+                    </tr>
+                </thead>
+                <tbody id="stat-per-kelas-body">
+                    <tr><td colspan="3" class="loading">Memuat...</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- PENGATURAN KODE AKSES KELAS -->
+        <div class="kelas-section-title">🔐 KODE AKSES KELAS</div>
+        <div class="kelola-card">
+            <div class="kelas-row" id="kelas-input-container">
+                <!-- Akan diisi JavaScript -->
+            </div>
+        </div>
+        
+        <!-- GANTI KODE ADMIN -->
+        <div class="kelas-section-title">🔑 GANTI KODE ADMIN</div>
+        <div class="kelola-card">
+            <div class="kelola-row">
+                <input type="text" id="kode-admin-baru" class="kelola-input" placeholder="Masukkan kode admin baru" style="flex:2;">
+                <button id="btn-update-admin" class="btn-kelola btn-update-admin">UPDATE KODE ADMIN</button>
+            </div>
+            <p style="color: #C9A227; font-size: 14px; margin-top: 10px;">
+                <i class="fas fa-info-circle"></i> Kode admin saat ini: <span id="kode-admin-saatini">-</span>
+            </p>
+        </div>
+        
+        <footer class="footer-dashboard">
+            <p>developed by mochamad anugrah saputra</p>
+        </footer>
+    </div>
+    
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script>
+        const kelasList = ['7A', '7B', '7C', '7D', '8A', '8B', '8C', '8D', '8E'];
+        let kelasData = {};
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cek login
+            if (!sessionStorage.getItem('is_admin')) {
+                window.location.href = 'admin-login.html';
+                return;
+            }
+            
+            // Logout
+            document.getElementById('btn-logout-admin').addEventListener('click', function() {
+                sessionStorage.removeItem('is_admin');
+                window.location.href = 'admin-login.html';
+            });
+            
+            // Load data real-time
+            loadKelasData();
+            loadStatistik();
+            loadKodeAdmin();
+            
+            // Update admin button
+            document.getElementById('btn-update-admin').addEventListener('click', updateKodeAdmin);
+        });
+        
+        function loadKelasData() {
+            // Load semua kelas dengan listener
+            db.collection('kelas').onSnapshot((snapshot) => {
+                let html = '';
+                snapshot.docs.forEach(doc => {
+                    const data = doc.data();
+                    html += `
+                        <div class="kelola-row">
+                            <span class="kelola-label">${doc.id}</span>
+                            <input type="text" id="input-${doc.id}" class="kelola-input" value="${data.kode_akses || ''}" placeholder="Kode akses...">
+                            <button class="btn-kelola btn-simpan" onclick="simpanKode('${doc.id}')">
+                                <i class="fas fa-save"></i> Simpan
+                            </button>
+                            <button class="btn-kelola btn-reset" onclick="resetKode('${doc.id}')">
+                                <i class="fas fa-undo"></i> Reset
+                            </button>
+                        </div>
+                    `;
+                });
+                document.getElementById('kelas-input-container').innerHTML = html;
+            });
+        }
+        
+        function loadStatistik() {
+            // Total murid
+            db.collection('murid').onSnapshot((snap) => {
+                const total = snap.size;
+                document.getElementById('stat-total-murid').innerText = total;
+                
+                // Kapasitas terisi
+                const kapasitas = 9 * 32;
+                const persen = Math.round((total / kapasitas) * 100);
+                document.getElementById('stat-terisi').innerText = persen + '%';
+            });
+            
+            // Per kelas
+            kelasList.forEach(kelas => {
+                db.collection('murid').where('kelas', '==', kelas).onSnapshot((snap) => {
+                    kelasData[kelas] = snap.size;
+                    renderStatPerKelas();
+                });
+            });
+        }
+        
+        function renderStatPerKelas() {
+            const tbody = document.getElementById('stat-per-kelas-body');
+            let html = '';
+            kelasList.forEach(kelas => {
+                const terisi = kelasData[kelas] || 0;
+                const persen = Math.round((terisi / 32) * 100);
+                html += `<tr>
+                    <td><strong>${kelas}</strong></td>
+                    <td>${terisi} / 32</td>
+                    <td>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${persen}%"></div>
+                        </div>
+                        <small>${persen}%</small>
+                    </td>
+                </tr>`;
+            });
+            tbody.innerHTML = html;
+        }
+        
+        function loadKodeAdmin() {
+            db.collection('admin').doc('admin_utama').onSnapshot((doc) => {
+                if (doc.exists) {
+                    document.getElementById('kode-admin-saatini').innerText = doc.data().kode_admin;
+                }
+            });
+        }
+        
+        async function simpanKode(kelasId) {
+            const input = document.getElementById(`input-${kelasId}`);
+            const kodeBaru = input.value.trim();
+            
+            if (!kodeBaru) {
+                alert('Kode akses tidak boleh kosong!');
+                return;
+            }
+            
+            try {
+                await db.collection('kelas').doc(kelasId).update({
+                    kode_akses: kodeBaru,
+                    terakhir_update: new Date().toLocaleString('id-ID')
+                });
+                alert(`Kode kelas ${kelasId} berhasil diupdate!`);
+            } catch (error) {
+                console.error(error);
+                alert('Gagal update: ' + error.message);
+            }
+        }
+        
+        function resetKode(kelasId) {
+            const defaultKode = `UKK-${kelasId}-2026`;
+            document.getElementById(`input-${kelasId}`).value = defaultKode;
+            simpanKode(kelasId);
+        }
+        
+        async function updateKodeAdmin() {
+            const kodeBaru = document.getElementById('kode-admin-baru').value.trim();
+            
+            if (!kodeBaru) {
+                alert('Masukkan kode admin baru!');
+                return;
+            }
+            
+            const confirm = window.confirm(`Ubah kode admin menjadi: ${kodeBaru}?`);
+            if (!confirm) return;
+            
+            try {
+                await db.collection('admin').doc('admin_utama').update({
+                    kode_admin: kodeBaru,
+                    last_login: new Date().toLocaleString('id-ID')
+                });
+                alert('Kode admin berhasil diupdate!');
+                document.getElementById('kode-admin-baru').value = '';
+            } catch (error) {
+                console.error(error);
+                alert('Gagal update: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

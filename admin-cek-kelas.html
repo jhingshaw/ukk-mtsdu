@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEK Kelas · UKK MTs Darul Ulum</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .search-box { margin-bottom: 20px; }
+        .filter-badge { 
+            display: inline-block; 
+            padding: 8px 16px; 
+            margin: 4px; 
+            background: #F0ECE5; 
+            border-radius: 30px; 
+            cursor: pointer;
+            font-size: 14px;
+            border: 2px solid transparent;
+        }
+        .filter-badge.active {
+            background: #0B3B2C;
+            color: white;
+            border-color: #C9A227;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .status-sudah { background: #C8E6C9; color: #2E7D32; }
+        .status-belum { background: #FFECB3; color: #F57F17; }
+        .status-belum-kumpul { background: #FFCDD2; color: #C62828; }
+        .btn-nilai {
+            padding: 4px 8px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .btn-nilai-sudah { background: #2E7D32; color: white; }
+        .btn-nilai-belum { background: #F57F17; color: white; }
+    </style>
+</head>
+<body class="bg-soft">
+    <div class="dashboard-container">
+        <header class="admin-header">
+            <div class="header-left">
+                <img src="assets/logo.png" alt="Logo" class="logo-small">
+                <div>
+                    <h2>👥 CEK KELAS</h2>
+                    <p>MTs Darul Ulum Cimahpar · UKK 2026</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <button id="btn-back" class="btn-logout" onclick="window.location.href='admin-dashboard.html'">
+                    <i class="fas fa-arrow-left"></i> Kembali
+                </button>
+                <button id="btn-logout-admin" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Keluar
+                </button>
+            </div>
+        </header>
+        
+        <!-- Search Box -->
+        <div class="search-box">
+            <div class="input-group">
+                <label for="search-murid"><i class="fas fa-search"></i> Cari Murid</label>
+                <input type="text" id="search-murid" placeholder="Ketik nama murid..." autocomplete="off">
+            </div>
+        </div>
+        
+        <!-- Filter Kelas -->
+        <div class="section-title">
+            <h3>🏷️ Filter Kelas</h3>
+        </div>
+        <div id="filter-kelas-container" class="filter-container">
+            <span class="filter-badge active" data-kelas="all">Semua Kelas</span>
+            <span class="filter-badge" data-kelas="7A">7A</span>
+            <span class="filter-badge" data-kelas="7B">7B</span>
+            <span class="filter-badge" data-kelas="7C">7C</span>
+            <span class="filter-badge" data-kelas="7D">7D</span>
+            <span class="filter-badge" data-kelas="8A">8A</span>
+            <span class="filter-badge" data-kelas="8B">8B</span>
+            <span class="filter-badge" data-kelas="8C">8C</span>
+            <span class="filter-badge" data-kelas="8D">8D</span>
+            <span class="filter-badge" data-kelas="8E">8E</span>
+        </div>
+        
+        <!-- Hasil Pencarian -->
+        <div class="section-title">
+            <h3>📋 Hasil <span id="result-count"></span></h3>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="kelas-table" id="murid-table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>Kelas</th>
+                        <th>Status</th>
+                        <th>Link</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="murid-list-body">
+                    <tr><td colspan="6" class="loading">Memuat data...</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination -->
+        <div class="pagination" id="pagination">
+            <button class="btn-page" id="prev-page" disabled>◀ Prev</button>
+            <span id="page-info">Halaman 1</span>
+            <button class="btn-page" id="next-page">Next ▶</button>
+        </div>
+        
+        <footer class="footer-dashboard">
+            <p>developed by mochamad anugrah saputra</p>
+        </footer>
+    </div>
+    
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script>
+        // GLOBAL VARIABLES
+        let currentFilterKelas = 'all';
+        let searchTerm = '';
+        let allMurid = [];
+        let filteredMurid = [];
+        let currentPage = 1;
+        const itemsPerPage = 20;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cek login
+            if (!sessionStorage.getItem('is_admin')) {
+                window.location.href = 'admin-login.html';
+                return;
+            }
+            
+            // Logout
+            document.getElementById('btn-logout-admin').addEventListener('click', function() {
+                sessionStorage.removeItem('is_admin');
+                window.location.href = 'admin-login.html';
+            });
+            
+            // Filter kelas click
+            document.querySelectorAll('.filter-badge').forEach(badge => {
+                badge.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-badge').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilterKelas = this.dataset.kelas;
+                    currentPage = 1;
+                    loadData();
+                });
+            });
+            
+            // Search input
+            document.getElementById('search-murid').addEventListener('input', function() {
+                searchTerm = this.value.toLowerCase();
+                currentPage = 1;
+                filterData();
+            });
+            
+            // Pagination
+            document.getElementById('prev-page').addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderTable();
+                }
+            });
+            
+            document.getElementById('next-page').addEventListener('click', () => {
+                if (currentPage < Math.ceil(filteredMurid.length / itemsPerPage)) {
+                    currentPage++;
+                    renderTable();
+                }
+            });
+            
+            // Load data real-time
+            loadData();
+        });
+        
+        function loadData() {
+            // Load semua murid dengan listener real-time
+            db.collection('murid').onSnapshot((snapshot) => {
+                allMurid = [];
+                snapshot.docs.forEach(doc => {
+                    allMurid.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+                filterData();
+            });
+        }
+        
+        function filterData() {
+            // Filter berdasarkan kelas dan search term
+            filteredMurid = allMurid.filter(murid => {
+                // Filter kelas
+                if (currentFilterKelas !== 'all' && murid.kelas !== currentFilterKelas) {
+                    return false;
+                }
+                
+                // Filter search
+                if (searchTerm && !murid.nama.toLowerCase().includes(searchTerm)) {
+                    return false;
+                }
+                
+                return true;
+            });
+            
+            // Update result count
+            document.getElementById('result-count').innerText = `(${filteredMurid.length} murid)`;
+            
+            // Reset ke halaman 1
+            currentPage = 1;
+            renderTable();
+        }
+        
+        async function renderTable() {
+            const tbody = document.getElementById('murid-list-body');
+            
+            if (filteredMurid.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="loading">Tidak ada data</td></tr>';
+                document.getElementById('pagination').style.display = 'none';
+                return;
+            }
+            
+            document.getElementById('pagination').style.display = 'flex';
+            
+            // Pagination
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const pageData = filteredMurid.slice(start, end);
+            
+            // Update page info
+            const totalPages = Math.ceil(filteredMurid.length / itemsPerPage);
+            document.getElementById('page-info').innerText = `Halaman ${currentPage} dari ${totalPages}`;
+            document.getElementById('prev-page').disabled = currentPage === 1;
+            document.getElementById('next-page').disabled = currentPage === totalPages;
+            
+            // Render rows
+            let html = '';
+            for (let i = 0; i < pageData.length; i++) {
+                const murid = pageData[i];
+                const index = start + i + 1;
+                
+                // Cek status pengumpulan dan nilai
+                const status = await getStatusMurid(murid.id, murid.kelas);
+                
+                let statusHtml = '';
+                let statusClass = '';
+                
+                if (!status.adaPengumpulan) {
+                    statusHtml = '❌ Belum Kumpul';
+                    statusClass = 'status-belum-kumpul';
+                } else if (!status.adaNilai) {
+                    statusHtml = '⏳ Perlu Dinilai';
+                    statusClass = 'status-belum';
+                } else {
+                    statusHtml = `✅ Sudah (${status.nilai})`;
+                    statusClass = 'status-sudah';
+                }
+                
+                html += `<tr>
+                    <td>${index}</td>
+                    <td><strong>${murid.nama}</strong></td>
+                    <td>${murid.kelas}</td>
+                    <td><span class="status-badge ${statusClass}">${statusHtml}</span></td>
+                    <td>
+                        ${status.link ? `<a href="${status.link}" target="_blank" class="link-tugas">🔗 Lihat</a>` : '-'}
+                    </td>
+                    <td>
+                        <button class="btn-nilai ${status.adaNilai ? 'btn-nilai-sudah' : 'btn-nilai-belum'}" 
+                                onclick="openNilai('${murid.id}', '${murid.nama}', '${murid.kelas}', '${status.link || ''}')">
+                            ${status.adaNilai ? '✏️ Edit' : '📝 Nilai'}
+                        </button>
+                    </td>
+                </tr>`;
+            }
+            
+            tbody.innerHTML = html;
+        }
+        
+        async function getStatusMurid(muridId, kelas) {
+            try {
+                // Cek pengumpulan
+                const pengumpulanSnap = await db.collection('pengumpulan')
+                    .where('murid_id', '==', muridId)
+                    .orderBy('created_at', 'desc')
+                    .limit(1)
+                    .get();
+                
+                const adaPengumpulan = !pengumpulanSnap.empty;
+                const link = adaPengumpulan ? pengumpulanSnap.docs[0].data().link : '';
+                
+                // Cek nilai
+                const nilaiSnap = await db.collection('nilai')
+                    .where('murid_id', '==', muridId)
+                    .get();
+                
+                const adaNilai = !nilaiSnap.empty;
+                const nilai = adaNilai ? nilaiSnap.docs[0].data().nilai : 0;
+                
+                return { adaPengumpulan, link, adaNilai, nilai };
+            } catch (error) {
+                console.error(error);
+                return { adaPengumpulan: false, link: '', adaNilai: false, nilai: 0 };
+            }
+        }
+        
+        function openNilai(muridId, nama, kelas, link) {
+            // Simpan ke sessionStorage
+            sessionStorage.setItem('nilai_murid_id', muridId);
+            sessionStorage.setItem('nilai_nama', nama);
+            sessionStorage.setItem('nilai_kelas', kelas);
+            sessionStorage.setItem('nilai_link', link);
+            
+            // Buka halaman input nilai
+            window.location.href = 'admin-nilai.html';
+        }
+    </script>
+</body>
+</html>
