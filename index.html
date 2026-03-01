@@ -5,44 +5,255 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Login Murid · UKK MTs Darul Ulum</title>
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .login-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 10% 30%, rgba(199, 160, 58, 0.1) 0%, transparent 30%),
+                        radial-gradient(circle at 90% 70%, rgba(15, 43, 61, 0.1) 0%, transparent 30%),
+                        linear-gradient(145deg, #f8fafd 0%, #edf2f7 100%);
+            padding: 16px;
+        }
+
+        .login-card-modern {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 48px;
+            padding: 40px 32px;
+            box-shadow: 
+                0 40px 70px -20px rgba(0, 0, 0, 0.25),
+                inset 0 1px 2px rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            width: 100%;
+            max-width: 460px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-card-modern::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 60%);
+            opacity: 0.4;
+            z-index: -1;
+        }
+
+        .logo-2026 {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .logo-glow {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            background: linear-gradient(145deg, var(--primary), var(--primary-light));
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 20px 30px -10px var(--primary),
+                inset 0 -3px 0 rgba(0,0,0,0.1);
+        }
+
+        .logo-glow i {
+            font-size: 50px;
+            color: white;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2));
+        }
+
+        .madrasah-title-2026 {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(145deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .madrasah-subtitle-2026 {
+            color: var(--text-soft);
+            font-size: 16px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        .welcome-back {
+            text-align: center;
+            margin: 30px 0 20px;
+        }
+
+        .welcome-back h2 {
+            font-size: 26px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .welcome-back p {
+            color: var(--text-light);
+            font-size: 15px;
+        }
+
+        .input-2026 {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            border-radius: 100px;
+            padding: 18px 24px;
+            width: 100%;
+            font-size: 16px;
+            transition: all 0.3s;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.02);
+        }
+
+        .input-2026:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: white;
+            box-shadow: 0 0 0 5px var(--accent-soft);
+        }
+
+        .input-group-2026 {
+            margin-bottom: 20px;
+        }
+
+        .input-group-2026 label {
+            display: block;
+            margin-bottom: 10px;
+            margin-left: 8px;
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        .input-group-2026 label i {
+            color: var(--accent);
+            margin-right: 8px;
+        }
+
+        .btn-login-2026 {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(145deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            border-radius: 100px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 15px 25px -8px var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .btn-login-2026:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 25px 30px -8px var(--primary);
+        }
+
+        .admin-link-2026 {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(0,0,0,0.05);
+        }
+
+        .admin-link-2026 a {
+            color: var(--text-soft);
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 40px;
+            background: rgba(255,255,255,0.5);
+            transition: all 0.2s;
+        }
+
+        .admin-link-2026 a:hover {
+            background: rgba(255,255,255,0.8);
+            color: var(--primary);
+        }
+
+        .floating-shape {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, var(--accent-soft) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .shape-1 {
+            top: -50px;
+            right: -50px;
+        }
+
+        .shape-2 {
+            bottom: -50px;
+            left: -50px;
+            background: radial-gradient(circle, rgba(15,43,61,0.2) 0%, transparent 70%);
+        }
+    </style>
 </head>
-<body class="bg-soft">
-    <div class="container">
-        <div class="login-card">
-            <div class="logo-container">
-                <img src="assets/logo.png" alt="Logo MTs Darul Ulum" class="logo">
-                <h1 class="madrasah-title">MTs Darul Ulum</h1>
-                <p class="madrasah-subtitle">Cimahpar · Kota Bogor</p>
-            </div>
+<body>
+    <div class="login-wrapper">
+        <div class="login-card-modern">
+            <div class="floating-shape shape-1"></div>
+            <div class="floating-shape shape-2"></div>
             
-            <div class="form-container">
-                <h2 class="form-title">🔐 Login Murid UKK 2026</h2>
-                
-                <div class="input-group">
-                    <label for="kode-kelas">
-                        <i class="fas fa-key"></i> Kode Akses Kelas
-                    </label>
-                    <input type="text" id="kode-kelas" placeholder="Contoh: UKK-8D-2026" autocomplete="off">
+            <div class="logo-2026">
+                <div class="logo-glow">
+                    <i class="fas fa-graduation-cap"></i>
                 </div>
-                
-                <button id="btn-login-murid" class="btn-primary">
-                    <i class="fas fa-arrow-right"></i> MASUK
-                </button>
-                
-                <div id="error-message" class="error-message"></div>
+                <h1 class="madrasah-title-2026">MTs Darul Ulum</h1>
+                <p class="madrasah-subtitle-2026">Cimahpar · Kota Bogor</p>
             </div>
             
-            <div class="admin-link">
+            <div class="welcome-back">
+                <h2>👋 Selamat Datang</h2>
+                <p>Masuk untuk mengumpulkan tugas UKK</p>
+            </div>
+            
+            <div class="input-group-2026">
+                <label for="kode-kelas">
+                    <i class="fas fa-key"></i> Kode Akses Kelas
+                </label>
+                <input type="text" id="kode-kelas" class="input-2026" placeholder="Contoh: UKK-7A-2026" autocomplete="off">
+            </div>
+            
+            <button id="btn-login-murid" class="btn-login-2026">
+                <i class="fas fa-arrow-right"></i> MASUK DASHBOARD
+            </button>
+            
+            <div id="error-message" class="error-message" style="color: var(--danger); text-align: center; margin-top: 15px;"></div>
+            
+            <div class="admin-link-2026">
                 <a href="admin-login.html">
-                    <i class="fas fa-user-shield"></i> Login Admin
+                    <i class="fas fa-user-shield"></i> Login untuk Admin
                 </a>
             </div>
             
-            <footer class="footer">
-                <p>© 2026 MTs Darul Ulum Cimahpar</p>
-                <p class="credit">developed by mochamad anugrah saputra</p>
+            <footer class="footer" style="margin-top: 30px;">
+                <p style="color: var(--text-light); font-size: 13px;">developed by mochamad anugrah saputra</p>
             </footer>
         </div>
     </div>

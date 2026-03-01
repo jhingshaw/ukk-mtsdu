@@ -5,109 +5,226 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rekap Nilai · UKK MTs Darul Ulum</title>
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .tab-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+        /* Dark Premium - Rekap Nilai */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        body.admin-dark-body {
+            background: radial-gradient(circle at 80% 20%, rgba(199, 160, 58, 0.12) 0%, transparent 40%),
+                        radial-gradient(circle at 20% 80%, rgba(15, 43, 61, 0.2) 0%, transparent 40%),
+                        linear-gradient(145deg, #1a2a38 0%, #0f2b3d 100%);
+            min-height: 100vh;
+            padding: 20px;
         }
-        .tab {
-            flex: 1;
-            padding: 15px;
-            text-align: center;
-            background: #F0ECE5;
-            border-radius: 12px;
+
+        .admin-dark-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(20, 30, 40, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 48px;
+            padding: 32px;
+            box-shadow: 0 40px 70px -20px rgba(0, 0, 0, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Header */
+        .admin-header-premium {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 32px; padding-bottom: 24px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+            flex-wrap: wrap; gap: 16px;
+        }
+
+        .header-left-premium {
+            display: flex; align-items: center; gap: 16px;
+        }
+
+        .logo-glow-small {
+            width: 50px; height: 50px;
+            background: linear-gradient(145deg, #c7a03a, #dbb153);
+            border-radius: 20px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 10px 20px -5px rgba(199, 160, 58, 0.3);
+        }
+
+        .logo-glow-small i { font-size: 26px; color: #0f2b3d; }
+
+        .header-left-premium h2 {
+            font-size: 1.8rem; font-weight: 700;
+            background: linear-gradient(145deg, #fff, #e0e0e0);
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+        }
+
+        .header-left-premium p { color: rgba(255, 255, 255, 0.6); font-size: 0.9rem; margin-top: 4px; }
+
+        .header-right-premium { display: flex; align-items: center; gap: 15px; }
+
+        .btn-back-premium, .btn-logout-premium {
+            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(8px);
+            border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 40px;
+            padding: 12px 24px; color: rgba(255, 255, 255, 0.8);
+            font-weight: 600; cursor: pointer; transition: all 0.3s;
+            display: flex; align-items: center; gap: 8px; text-decoration: none;
+        }
+
+        .btn-back-premium:hover { border-color: #c7a03a; color: #c7a03a; }
+        .btn-logout-premium:hover { border-color: #b23b3b; color: #b23b3b; }
+
+        /* Tabs */
+        .tab-container-premium {
+            display: flex; gap: 15px; margin-bottom: 30px;
+        }
+
+        .tab-premium {
+            flex: 1; padding: 20px; text-align: center;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(8px);
+            border-radius: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
             cursor: pointer;
-            font-weight: 600;
             transition: all 0.3s;
         }
-        .tab.active {
-            background: #0B3B2C;
-            color: white;
+
+        .tab-premium.active {
+            background: rgba(199, 160, 58, 0.15);
+            border-color: #c7a03a;
         }
-        .tab .count {
-            font-size: 20px;
-            display: block;
+
+        .tab-premium .count {
+            font-size: 2rem; font-weight: 700; color: white; display: block;
         }
-        .rekap-table th {
-            background: #0B3B2C;
-            color: white;
+
+        .tab-premium .label {
+            color: rgba(255, 255, 255, 0.7); font-size: 1rem;
         }
-        .checkbox-col {
-            width: 40px;
-            text-align: center;
+
+        .tab-premium.active .count { color: #c7a03a; }
+
+        /* Filter Section */
+        .filter-rekap-premium {
+            display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap;
         }
-        .nilai-input {
-            width: 80px;
-            padding: 8px;
-            border: 2px solid #E0E0E0;
-            border-radius: 8px;
-            text-align: center;
+
+        .filter-select-premium, .filter-input-premium {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 40px; padding: 14px 20px;
+            color: white; font-size: 0.95rem;
+            flex: 1; min-width: 200px;
         }
-        .btn-bulk {
-            background: #C9A227;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            margin: 20px 0;
+
+        .filter-select-premium option { background: #1a2a38; }
+
+        /* Table Premium */
+        .table-responsive-premium {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(4px);
+            border-radius: 32px; padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            overflow-x: auto;
         }
-        .btn-bulk:hover {
-            background: #B88C1F;
+
+        .kelas-table-premium {
+            width: 100%; border-collapse: collapse;
         }
-        .filter-rekap {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
+
+        .kelas-table-premium th {
+            text-align: left; padding: 18px 16px;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 500; font-size: 0.85rem;
+            text-transform: uppercase; letter-spacing: 0.05em;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.05);
         }
-        .filter-rekap select, .filter-rekap input {
-            padding: 12px;
-            border: 2px solid #E0E0E0;
-            border-radius: 12px;
-            flex: 1;
+
+        .kelas-table-premium td {
+            padding: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .kelas-table-premium tbody tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Checkbox */
+        .checkbox-col { width: 40px; text-align: center; }
+        .checkbox-premium {
+            width: 20px; height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px; cursor: pointer;
+        }
+
+        /* Buttons */
+        .btn-bulk-premium {
+            background: #c7a03a; color: #0f2b3d;
+            border: none; border-radius: 40px;
+            padding: 16px 32px; font-weight: 700;
+            cursor: pointer; transition: all 0.3s;
+            margin: 20px 0; font-size: 1rem;
+        }
+
+        .btn-bulk-premium:hover {
+            background: #dbb153; transform: translateY(-2px);
+            box-shadow: 0 15px 25px -8px rgba(199, 160, 58, 0.4);
+        }
+
+        .btn-edit-premium {
+            background: rgba(199, 160, 58, 0.2);
+            color: #c7a03a; border: 1px solid rgba(199, 160, 58, 0.3);
+            border-radius: 30px; padding: 6px 14px;
+            cursor: pointer; transition: all 0.2s;
+        }
+
+        .btn-edit-premium:hover {
+            background: #c7a03a; color: #0f2b3d;
+        }
+
+        .footer-dashboard-premium {
+            text-align: center; margin-top: 48px; padding-top: 24px;
+            border-top: 2px solid rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .loading-premium {
+            text-align: center; padding: 40px;
+            color: rgba(255, 255, 255, 0.5); font-style: italic;
         }
     </style>
 </head>
-<body class="bg-soft">
-    <div class="dashboard-container">
-        <header class="admin-header">
-            <div class="header-left">
-                <img src="assets/logo.png" alt="Logo" class="logo-small">
-                <div>
-                    <h2>📋 REKAP NILAI</h2>
-                    <p>MTs Darul Ulum Cimahpar · UKK 2026</p>
-                </div>
+<body class="admin-dark-body">
+    <div class="admin-dark-container">
+        <!-- Header -->
+        <header class="admin-header-premium">
+            <div class="header-left-premium">
+                <div class="logo-glow-small"><i class="fas fa-clipboard-list"></i></div>
+                <div><h2>REKAP NILAI</h2><p>MTs Darul Ulum · UKK 2026</p></div>
             </div>
-            <div class="header-right">
-                <button id="btn-back" class="btn-logout" onclick="window.location.href='admin-dashboard.html'">
-                    <i class="fas fa-arrow-left"></i> Kembali
-                </button>
-                <button id="btn-logout-admin" class="btn-logout">
-                    <i class="fas fa-sign-out-alt"></i> Keluar
-                </button>
+            <div class="header-right-premium">
+                <button class="btn-back-premium" onclick="window.location.href='admin-dashboard.html'"><i class="fas fa-arrow-left"></i> Kembali</button>
+                <button id="btn-logout-admin" class="btn-logout-premium"><i class="fas fa-sign-out-alt"></i> Keluar</button>
             </div>
         </header>
         
-        <!-- TABS -->
-        <div class="tab-container">
-            <div class="tab active" id="tab-belum">
+        <!-- Tabs -->
+        <div class="tab-container-premium">
+            <div class="tab-premium active" id="tab-belum">
                 <span class="count" id="count-belum">0</span>
-                ⏳ BELUM DIREKAP
+                <span class="label">⏳ BELUM DIREKAP</span>
             </div>
-            <div class="tab" id="tab-sudah">
+            <div class="tab-premium" id="tab-sudah">
                 <span class="count" id="count-sudah">0</span>
-                ✅ SUDAH DIREKAP
+                <span class="label">✅ SUDAH DIREKAP</span>
             </div>
         </div>
         
-        <!-- FILTER SECTION -->
-        <div class="filter-rekap">
-            <select id="filter-kelas-rekap">
+        <!-- Filter -->
+        <div class="filter-rekap-premium">
+            <select id="filter-kelas-rekap" class="filter-select-premium">
                 <option value="all">Semua Kelas</option>
                 <option value="7A">7A</option>
                 <option value="7B">7B</option>
@@ -119,225 +236,194 @@
                 <option value="8D">8D</option>
                 <option value="8E">8E</option>
             </select>
-            <input type="text" id="search-rekap" placeholder="Cari nama...">
+            <input type="text" id="search-rekap" class="filter-input-premium" placeholder="Cari nama...">
         </div>
         
-        <!-- TAB BELUM DIREKAP -->
+        <!-- Panel Belum -->
         <div id="panel-belum" style="display: block;">
             <div style="margin: 20px 0;">
-                <label>
-                    <input type="checkbox" id="select-all-belum"> Pilih Semua
-                </label>
+                <label style="color:white;"><input type="checkbox" id="select-all-belum" class="checkbox-premium"> Pilih Semua</label>
             </div>
             
-            <div class="table-responsive">
-                <table class="kelas-table rekap-table">
-                    <thead>
-                        <tr>
-                            <th class="checkbox-col">Pilih</th>
-                            <th>No</th>
-                            <th>Nama</th>
-                            <th>Kelas</th>
-                            <th>Link Tugas</th>
-                            <th>Waktu</th>
-                        </tr>
-                    </thead>
-                    <tbody id="list-belum">
-                        <tr><td colspan="6" class="loading">Memuat data...</td></tr>
-                    </tbody>
+            <div class="table-responsive-premium">
+                <table class="kelas-table-premium">
+                    <thead><tr><th class="checkbox-col">Pilih</th><th>No</th><th>Nama</th><th>Kelas</th><th>Link Tugas</th><th>Waktu</th></tr></thead>
+                    <tbody id="list-belum"><tr><td colspan="6" class="loading-premium">Memuat data...</td></tr></tbody>
                 </table>
             </div>
             
-            <button class="btn-bulk" id="btn-tandai-sudah">
-                ✔️ TANDAI SELECTED SUDAH DINILAI
-            </button>
+            <button class="btn-bulk-premium" id="btn-tandai-sudah">✔️ TANDAI SELECTED SUDAH DINILAI</button>
         </div>
         
-        <!-- TAB SUDAH DIREKAP -->
+        <!-- Panel Sudah -->
         <div id="panel-sudah" style="display: none;">
-            <div class="table-responsive">
-                <table class="kelas-table rekap-table">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Nama</th>
-                            <th>Kelas</th>
-                            <th>Nilai</th>
-                            <th>Catatan</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="list-sudah">
-                        <tr><td colspan="6" class="loading">Memuat data...</td></tr>
-                    </tbody>
+            <div class="table-responsive-premium">
+                <table class="kelas-table-premium">
+                    <thead><tr><th>No</th><th>Nama</th><th>Kelas</th><th>Nilai</th><th>Catatan</th><th>Aksi</th></tr></thead>
+                    <tbody id="list-sudah"><tr><td colspan="6" class="loading-premium">Memuat data...</td></tr></tbody>
                 </table>
             </div>
             
             <div style="display: flex; gap: 10px; margin: 20px 0;">
-                <button class="btn-bulk" id="btn-export-excel">
-                    📤 EXPORT EXCEL
-                </button>
-                <button class="btn-bulk" id="btn-export-pdf">
-                    📄 EXPORT PDF
-                </button>
+                <button class="btn-bulk-premium" id="btn-export-excel">📤 EXPORT EXCEL</button>
             </div>
         </div>
         
-        <footer class="footer-dashboard">
+        <footer class="footer-dashboard-premium">
             <p>developed by mochamad anugrah saputra</p>
         </footer>
     </div>
     
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    <script src="js/firebase-config.js"></script>
-    <script>
-        let currentTab = 'belum';
-        let dataBelum = [];
-        let dataSudah = [];
-        let selectedIds = new Set();
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script>
+    let currentTab = 'belum';
+    let dataBelum = [];
+    let dataSudah = [];
+    let selectedIds = new Set();
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Cek login
+        if (!sessionStorage.getItem('is_admin')) {
+            window.location.href = 'admin-login.html';
+            return;
+        }
         
-        document.addEventListener('DOMContentLoaded', function() {
-            // Cek login
-            if (!sessionStorage.getItem('is_admin')) {
-                window.location.href = 'admin-login.html';
-                return;
-            }
-            
-            // Logout
-            document.getElementById('btn-logout-admin').addEventListener('click', function() {
-                sessionStorage.removeItem('is_admin');
-                window.location.href = 'admin-login.html';
+        // Logout
+        document.getElementById('btn-logout-admin').addEventListener('click', function() {
+            sessionStorage.removeItem('is_admin');
+            window.location.href = 'admin-login.html';
+        });
+        
+        // Tab switching
+        document.getElementById('tab-belum').addEventListener('click', () => switchTab('belum'));
+        document.getElementById('tab-sudah').addEventListener('click', () => switchTab('sudah'));
+        
+        // Select all
+        document.getElementById('select-all-belum').addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('.select-item');
+            checkboxes.forEach(cb => {
+                cb.checked = this.checked;
+                if (this.checked) {
+                    selectedIds.add(cb.value);
+                } else {
+                    selectedIds.delete(cb.value);
+                }
             });
-            
-            // Tab switching
-            document.getElementById('tab-belum').addEventListener('click', () => switchTab('belum'));
-            document.getElementById('tab-sudah').addEventListener('click', () => switchTab('sudah'));
-            
-            // Select all
-            document.getElementById('select-all-belum').addEventListener('change', function() {
-                const checkboxes = document.querySelectorAll('.select-item');
-                checkboxes.forEach(cb => {
-                    cb.checked = this.checked;
-                    if (this.checked) {
-                        selectedIds.add(cb.value);
+        });
+        
+        // Tandai sudah dinilai
+        document.getElementById('btn-tandai-sudah').addEventListener('click', tandaiSudahDinilai);
+        
+        // Filter & search
+        document.getElementById('filter-kelas-rekap').addEventListener('change', loadData);
+        document.getElementById('search-rekap').addEventListener('input', loadData);
+        
+        // Export buttons
+        document.getElementById('btn-export-excel').addEventListener('click', exportExcel);
+        
+        // Load data
+        loadData();
+    });
+    
+    function switchTab(tab) {
+        currentTab = tab;
+        
+        // Update tab style
+        document.getElementById('tab-belum').classList.toggle('active', tab === 'belum');
+        document.getElementById('tab-sudah').classList.toggle('active', tab === 'sudah');
+        
+        // Show/hide panels
+        document.getElementById('panel-belum').style.display = tab === 'belum' ? 'block' : 'none';
+        document.getElementById('panel-sudah').style.display = tab === 'sudah' ? 'block' : 'none';
+        
+        if (tab === 'sudah') {
+            renderSudah();
+        }
+    }
+    
+    function loadData() {
+        // Load murid yang belum punya nilai
+        db.collection('murid').onSnapshot((muridSnap) => {
+            // Load semua nilai
+            db.collection('nilai').onSnapshot((nilaiSnap) => {
+                const nilaiMap = new Map();
+                nilaiSnap.docs.forEach(doc => {
+                    nilaiMap.set(doc.data().murid_id, doc.data());
+                });
+                
+                // Load semua pengumpulan
+                db.collection('pengumpulan').onSnapshot((pengumpulanSnap) => {
+                    const pengumpulanMap = new Map();
+                    pengumpulanSnap.docs.forEach(doc => {
+                        const data = doc.data();
+                        if (!pengumpulanMap.has(data.murid_id)) {
+                            pengumpulanMap.set(data.murid_id, data);
+                        }
+                    });
+                    
+                    // Filter data
+                    const filterKelas = document.getElementById('filter-kelas-rekap').value;
+                    const searchTerm = document.getElementById('search-rekap').value.toLowerCase();
+                    
+                    dataBelum = [];
+                    dataSudah = [];
+                    
+                    muridSnap.docs.forEach(doc => {
+                        const murid = { id: doc.id, ...doc.data() };
+                        
+                        // Filter kelas
+                        if (filterKelas !== 'all' && murid.kelas !== filterKelas) return;
+                        
+                        // Filter search
+                        if (searchTerm && !murid.nama.toLowerCase().includes(searchTerm)) return;
+                        
+                        const punyaNilai = nilaiMap.has(murid.id);
+                        const punyaPengumpulan = pengumpulanMap.has(murid.id);
+                        
+                        if (punyaNilai) {
+                            dataSudah.push({
+                                ...murid,
+                                nilai: nilaiMap.get(murid.id).nilai,
+                                catatan: nilaiMap.get(murid.id).catatan || '-'
+                            });
+                        } else if (punyaPengumpulan) {
+                            dataBelum.push({
+                                ...murid,
+                                link: pengumpulanMap.get(murid.id).link,
+                                waktu: pengumpulanMap.get(murid.id).waktu
+                            });
+                        }
+                    });
+                    
+                    // Update counts
+                    document.getElementById('count-belum').innerText = dataBelum.length;
+                    document.getElementById('count-sudah').innerText = dataSudah.length;
+                    
+                    // Render current tab
+                    if (currentTab === 'belum') {
+                        renderBelum();
                     } else {
-                        selectedIds.delete(cb.value);
+                        renderSudah();
                     }
                 });
             });
-            
-            // Tandai sudah dinilai
-            document.getElementById('btn-tandai-sudah').addEventListener('click', tandaiSudahDinilai);
-            
-            // Filter & search
-            document.getElementById('filter-kelas-rekap').addEventListener('change', loadData);
-            document.getElementById('search-rekap').addEventListener('input', loadData);
-            
-            // Export buttons
-            document.getElementById('btn-export-excel').addEventListener('click', exportExcel);
-            
-            // Load data
-            loadData();
         });
+    }
+    
+    function renderBelum() {
+        const tbody = document.getElementById('list-belum');
+        selectedIds.clear();
         
-        function switchTab(tab) {
-            currentTab = tab;
-            
-            // Update tab style
-            document.getElementById('tab-belum').classList.toggle('active', tab === 'belum');
-            document.getElementById('tab-sudah').classList.toggle('active', tab === 'sudah');
-            
-            // Show/hide panels
-            document.getElementById('panel-belum').style.display = tab === 'belum' ? 'block' : 'none';
-            document.getElementById('panel-sudah').style.display = tab === 'sudah' ? 'block' : 'none';
-            
-            if (tab === 'sudah') {
-                renderSudah();
-            }
+        if (dataBelum.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="loading">Tidak ada data</td></tr>';
+            return;
         }
         
-        function loadData() {
-            // Load murid yang belum punya nilai
-            db.collection('murid').onSnapshot((muridSnap) => {
-                // Load semua nilai
-                db.collection('nilai').onSnapshot((nilaiSnap) => {
-                    const nilaiMap = new Map();
-                    nilaiSnap.docs.forEach(doc => {
-                        nilaiMap.set(doc.data().murid_id, doc.data());
-                    });
-                    
-                    // Load semua pengumpulan
-                    db.collection('pengumpulan').onSnapshot((pengumpulanSnap) => {
-                        const pengumpulanMap = new Map();
-                        pengumpulanSnap.docs.forEach(doc => {
-                            const data = doc.data();
-                            if (!pengumpulanMap.has(data.murid_id)) {
-                                pengumpulanMap.set(data.murid_id, data);
-                            }
-                        });
-                        
-                        // Filter data
-                        const filterKelas = document.getElementById('filter-kelas-rekap').value;
-                        const searchTerm = document.getElementById('search-rekap').value.toLowerCase();
-                        
-                        dataBelum = [];
-                        dataSudah = [];
-                        
-                        muridSnap.docs.forEach(doc => {
-                            const murid = { id: doc.id, ...doc.data() };
-                            
-                            // Filter kelas
-                            if (filterKelas !== 'all' && murid.kelas !== filterKelas) return;
-                            
-                            // Filter search
-                            if (searchTerm && !murid.nama.toLowerCase().includes(searchTerm)) return;
-                            
-                            const punyaNilai = nilaiMap.has(murid.id);
-                            const punyaPengumpulan = pengumpulanMap.has(murid.id);
-                            
-                            if (punyaNilai) {
-                                dataSudah.push({
-                                    ...murid,
-                                    nilai: nilaiMap.get(murid.id).nilai,
-                                    catatan: nilaiMap.get(murid.id).catatan || '-'
-                                });
-                            } else if (punyaPengumpulan) {
-                                dataBelum.push({
-                                    ...murid,
-                                    link: pengumpulanMap.get(murid.id).link,
-                                    waktu: pengumpulanMap.get(murid.id).waktu
-                                });
-                            }
-                        });
-                        
-                        // Update counts
-                        document.getElementById('count-belum').innerText = dataBelum.length;
-                        document.getElementById('count-sudah').innerText = dataSudah.length;
-                        
-                        // Render current tab
-                        if (currentTab === 'belum') {
-                            renderBelum();
-                        } else {
-                            renderSudah();
-                        }
-                    });
-                });
-            });
-        }
-        
-        function renderBelum() {
-            const tbody = document.getElementById('list-belum');
-            selectedIds.clear();
-            
-            if (dataBelum.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="loading">Tidak ada data</td></tr>';
-                return;
-            }
-            
-            let html = '';
-            dataBelum.forEach((murid, idx) => {
-                html += `<tr>
+        let html = '';
+        dataBelum.forEach((murid, idx) => {
+            html += `<tr>
                     <td class="checkbox-col">
                         <input type="checkbox" class="select-item" value="${murid.id}" data-nama="${murid.nama}" data-kelas="${murid.kelas}">
                     </td>
@@ -347,33 +433,33 @@
                     <td><a href="${murid.link}" target="_blank">🔗 Link</a></td>
                     <td>${murid.waktu || '-'}</td>
                 </tr>`;
+        });
+        
+        tbody.innerHTML = html;
+        
+        // Add event listeners to checkboxes
+        document.querySelectorAll('.select-item').forEach(cb => {
+            cb.addEventListener('change', function() {
+                if (this.checked) {
+                    selectedIds.add(this.value);
+                } else {
+                    selectedIds.delete(this.value);
+                }
             });
-            
-            tbody.innerHTML = html;
-            
-            // Add event listeners to checkboxes
-            document.querySelectorAll('.select-item').forEach(cb => {
-                cb.addEventListener('change', function() {
-                    if (this.checked) {
-                        selectedIds.add(this.value);
-                    } else {
-                        selectedIds.delete(this.value);
-                    }
-                });
-            });
+        });
+    }
+    
+    function renderSudah() {
+        const tbody = document.getElementById('list-sudah');
+        
+        if (dataSudah.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="loading">Tidak ada data</td></tr>';
+            return;
         }
         
-        function renderSudah() {
-            const tbody = document.getElementById('list-sudah');
-            
-            if (dataSudah.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="loading">Tidak ada data</td></tr>';
-                return;
-            }
-            
-            let html = '';
-            dataSudah.forEach((murid, idx) => {
-                html += `<tr>
+        let html = '';
+        dataSudah.forEach((murid, idx) => {
+            html += `<tr>
                     <td>${idx + 1}</td>
                     <td><strong>${murid.nama}</strong></td>
                     <td>${murid.kelas}</td>
@@ -385,72 +471,72 @@
                         </button>
                     </td>
                 </tr>`;
-            });
-            
-            tbody.innerHTML = html;
+        });
+        
+        tbody.innerHTML = html;
+    }
+    
+    async function tandaiSudahDinilai() {
+        if (selectedIds.size === 0) {
+            alert('Pilih minimal satu murid!');
+            return;
         }
         
-        async function tandaiSudahDinilai() {
-            if (selectedIds.size === 0) {
-                alert('Pilih minimal satu murid!');
-                return;
-            }
+        const confirm = window.confirm(`Tandai ${selectedIds.size} murid sebagai SUDAH DINILAI?`);
+        if (!confirm) return;
+        
+        try {
+            const batch = db.batch();
             
-            const confirm = window.confirm(`Tandai ${selectedIds.size} murid sebagai SUDAH DINILAI?`);
-            if (!confirm) return;
-            
-            try {
-                const batch = db.batch();
-                
-                selectedIds.forEach(muridId => {
-                    const nilaiRef = db.collection('nilai').doc();
-                    batch.set(nilaiRef, {
-                        murid_id: muridId,
-                        nilai: 0,
-                        status: 'sudah',
-                        catatan: 'Belum diisi',
-                        dinilai_oleh: 'admin',
-                        waktu_dinilai: new Date().toLocaleString('id-ID')
-                    });
+            selectedIds.forEach(muridId => {
+                const nilaiRef = db.collection('nilai').doc();
+                batch.set(nilaiRef, {
+                    murid_id: muridId,
+                    nilai: 0,
+                    status: 'sudah',
+                    catatan: 'Belum diisi',
+                    dinilai_oleh: 'admin',
+                    waktu_dinilai: new Date().toLocaleString('id-ID')
                 });
-                
-                await batch.commit();
-                alert('Berhasil ditandai! Silakan edit nilai di tab SUDAH DIREKAP.');
-                
-                // Reset selected
-                selectedIds.clear();
-                document.getElementById('select-all-belum').checked = false;
-                
-            } catch (error) {
-                console.error(error);
-                alert('Gagal: ' + error.message);
-            }
-        }
-        
-        function editNilai(muridId) {
-            const murid = dataSudah.find(m => m.id === muridId);
-            if (murid) {
-                sessionStorage.setItem('nilai_murid_id', muridId);
-                sessionStorage.setItem('nilai_nama', murid.nama);
-                sessionStorage.setItem('nilai_kelas', murid.kelas);
-                sessionStorage.setItem('nilai_link', '');
-                window.location.href = 'admin-nilai.html';
-            }
-        }
-        
-        function exportExcel() {
-            let csv = "Nama,Kelas,Nilai,Catatan\n";
-            dataSudah.forEach(m => {
-                csv += `"${m.nama}",${m.kelas},${m.nilai},"${m.catatan}"\n`;
             });
             
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `rekap-nilai-ukk-${new Date().toISOString().slice(0,10)}.csv`;
-            a.click();
+            await batch.commit();
+            alert('Berhasil ditandai! Silakan edit nilai di tab SUDAH DIREKAP.');
+            
+            // Reset selected
+            selectedIds.clear();
+            document.getElementById('select-all-belum').checked = false;
+            
+        } catch (error) {
+            console.error(error);
+            alert('Gagal: ' + error.message);
         }
-    </script>
+    }
+    
+    function editNilai(muridId) {
+        const murid = dataSudah.find(m => m.id === muridId);
+        if (murid) {
+            sessionStorage.setItem('nilai_murid_id', muridId);
+            sessionStorage.setItem('nilai_nama', murid.nama);
+            sessionStorage.setItem('nilai_kelas', murid.kelas);
+            sessionStorage.setItem('nilai_link', '');
+            window.location.href = 'admin-nilai.html';
+        }
+    }
+    
+    function exportExcel() {
+        let csv = "Nama,Kelas,Nilai,Catatan\n";
+        dataSudah.forEach(m => {
+            csv += `"${m.nama}",${m.kelas},${m.nilai},"${m.catatan}"\n`;
+        });
+        
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `rekap-nilai-ukk-${new Date().toISOString().slice(0,10)}.csv`;
+        a.click();
+    }
+</script>
 </body>
 </html>

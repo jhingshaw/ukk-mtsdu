@@ -5,57 +5,313 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Murid · UKK MTs Darul Ulum</title>
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .murid-dashboard-wrapper {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #f8fafd 0%, #edf2f7 100%);
+            padding: 20px;
+        }
+
+        .murid-header-premium {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 40px;
+            padding: 20px 28px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
+        }
+
+        .murid-greeting {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .murid-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(145deg, var(--primary), var(--primary-light));
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 30px;
+            box-shadow: 0 15px 20px -8px var(--primary);
+        }
+
+        .greeting-text h2 {
+            font-size: 22px;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .greeting-text p {
+            color: var(--text-soft);
+            font-size: 14px;
+        }
+
+        .btn-logout-2026 {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(8px);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 40px;
+            padding: 12px 24px;
+            color: var(--text-dark);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-logout-2026:hover {
+            background: white;
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .murid-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card-murid {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 30px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 20px -8px rgba(0,0,0,0.05);
+        }
+
+        .stat-card-murid .stat-icon {
+            font-size: 30px;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+
+        .stat-card-murid .stat-number {
+            font-size: 40px;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+
+        .stat-card-murid .stat-label {
+            color: var(--text-soft);
+            font-size: 14px;
+        }
+
+        .form-kumpul-premium {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 40px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
+        }
+
+        .form-kumpul-premium h3 {
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-kumpul-premium h3 i {
+            color: var(--accent);
+        }
+
+        .input-murid-premium {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            border-radius: 100px;
+            padding: 18px 24px;
+            width: 100%;
+            font-size: 16px;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .input-murid-premium:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: white;
+            box-shadow: 0 0 0 5px var(--accent-soft);
+        }
+
+        .btn-kirim-premium {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(145deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            border-radius: 100px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 15px 25px -8px var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-kirim-premium:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 25px 30px -8px var(--primary);
+        }
+
+        .riwayat-premium {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 40px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
+        }
+
+        .riwayat-premium h3 {
+            font-size: 22px;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .riwayat-item {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 25px;
+            padding: 18px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.2s;
+        }
+
+        .riwayat-item:hover {
+            background: white;
+            transform: translateX(5px);
+        }
+
+        .riwayat-time {
+            font-size: 13px;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .riwayat-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            word-break: break-all;
+        }
+
+        .notif-success {
+            background: rgba(44, 110, 73, 0.2);
+            color: var(--success);
+            padding: 15px;
+            border-radius: 30px;
+            text-align: center;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        .notif-error {
+            background: rgba(178, 59, 59, 0.1);
+            color: var(--danger);
+            padding: 15px;
+            border-radius: 30px;
+            text-align: center;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .murid-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .murid-header-premium {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .murid-greeting {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
-<body class="bg-soft">
-    <div class="dashboard-container">
-        <header class="dashboard-header">
-            <div class="header-left">
-                <img src="assets/logo.png" alt="Logo" class="logo-small">
-                <div>
-                    <h2>UKK 2026</h2>
-                    <p>MTs Darul Ulum Cimahpar</p>
+<body>
+    <div class="murid-dashboard-wrapper">
+        <div class="murid-header-premium">
+            <div class="murid-greeting">
+                <div class="murid-avatar">
+                    <i class="fas fa-user-graduate"></i>
                 </div>
-            </div>
-            <button id="btn-logout" class="btn-logout">
-                <i class="fas fa-sign-out-alt"></i> Keluar
-            </button>
-        </header>
-        
-        <div class="murid-profile">
-            <div class="profile-card">
-                <i class="fas fa-user-circle profile-icon"></i>
-                <div>
-                    <h3 id="nama-murid">-</h3>
+                <div class="greeting-text">
+                    <h2 id="nama-murid">-</h2>
                     <p id="kelas-murid">Kelas: -</p>
                 </div>
             </div>
+            <button id="btn-logout" class="btn-logout-2026">
+                <i class="fas fa-sign-out-alt"></i> Keluar
+            </button>
         </div>
         
-        <div class="form-kumpul">
-            <h3>📤 Kumpulkan Tugas</h3>
-            <div class="input-group">
-                <label for="link-tugas">
-                    <i class="fab fa-google"></i> Link Google Sheets
-                </label>
-                <input type="url" id="link-tugas" placeholder="https://docs.google.com/spreadsheets/d/...">
+        <div class="murid-stats">
+            <div class="stat-card-murid">
+                <div class="stat-icon">
+                    <i class="fas fa-tasks"></i>
+                </div>
+                <div class="stat-number" id="total-tugas-murid">0</div>
+                <div class="stat-label">Total Tugas</div>
             </div>
-            <button id="btn-kirim-tugas" class="btn-primary">
+            <div class="stat-card-murid">
+                <div class="stat-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-number" id="tugas-terakhir">-</div>
+                <div class="stat-label">Terakhir Kirim</div>
+            </div>
+        </div>
+        
+        <div class="form-kumpul-premium">
+            <h3><i class="fas fa-cloud-upload-alt"></i> Kumpulkan Tugas</h3>
+            <input type="url" id="link-tugas" class="input-murid-premium" placeholder="https://docs.google.com/spreadsheets/d/...">
+            <button id="btn-kirim-tugas" class="btn-kirim-premium">
                 <i class="fas fa-paper-plane"></i> KIRIM TUGAS
             </button>
             <div id="notif-kirim" class="notif-success"></div>
         </div>
         
-        <div class="riwayat-container">
-            <h3>📋 Riwayat Pengumpulan</h3>
+        <div class="riwayat-premium">
+            <h3><i class="fas fa-history"></i> Riwayat Pengumpulan</h3>
             <div id="riwayat-list" class="riwayat-list">
-                <!-- Akan diisi JavaScript -->
-                <p class="loading">Memuat riwayat...</p>
+                <p class="loading" style="text-align: center; padding: 20px;">Memuat riwayat...</p>
             </div>
         </div>
         
-        <footer class="footer-dashboard">
+        <footer class="footer-dashboard" style="margin-top: 30px;">
             <p>developed by mochamad anugrah saputra</p>
         </footer>
     </div>
@@ -65,3 +321,4 @@
     <script src="js/firebase-config.js"></script>
     <script src="js/murid.js"></script>
 </body>
+</html>

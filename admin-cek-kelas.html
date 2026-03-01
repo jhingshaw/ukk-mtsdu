@@ -5,98 +5,476 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CEK Kelas · UKK MTs Darul Ulum</title>
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .search-box { margin-bottom: 20px; }
-        .filter-badge { 
-            display: inline-block; 
-            padding: 8px 16px; 
-            margin: 4px; 
-            background: #F0ECE5; 
-            border-radius: 30px; 
-            cursor: pointer;
-            font-size: 14px;
-            border: 2px solid transparent;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
         }
-        .filter-badge.active {
-            background: #0B3B2C;
-            color: white;
-            border-color: #C9A227;
+
+        body.admin-dark-body {
+            background: radial-gradient(circle at 80% 20%, rgba(199, 160, 58, 0.12) 0%, transparent 40%),
+                        radial-gradient(circle at 20% 80%, rgba(15, 43, 61, 0.2) 0%, transparent 40%),
+                        linear-gradient(145deg, #1a2a38 0%, #0f2b3d 100%);
+            min-height: 100vh;
+            padding: 20px;
         }
-        .status-badge {
-            display: inline-block;
-            padding: 4px 8px;
+
+        .admin-dark-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(20, 30, 40, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 48px;
+            padding: 32px;
+            box-shadow: 
+                0 40px 70px -20px rgba(0, 0, 0, 0.5),
+                inset 0 1px 2px rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Header */
+        .admin-header-premium {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header-left-premium {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-glow-small {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(145deg, #c7a03a, #dbb153);
             border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px -5px rgba(199, 160, 58, 0.3);
         }
-        .status-sudah { background: #C8E6C9; color: #2E7D32; }
-        .status-belum { background: #FFECB3; color: #F57F17; }
-        .status-belum-kumpul { background: #FFCDD2; color: #C62828; }
-        .btn-nilai {
-            padding: 4px 8px;
-            border-radius: 8px;
+
+        .logo-glow-small i {
+            font-size: 26px;
+            color: #0f2b3d;
+        }
+
+        .header-left-premium h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(145deg, #fff, #e0e0e0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.02em;
+        }
+
+        .header-left-premium p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+
+        .header-right-premium {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn-back-premium {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(8px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 40px;
+            padding: 12px 24px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-back-premium:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #c7a03a;
+            color: #c7a03a;
+        }
+
+        .btn-logout-premium {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(8px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 40px;
+            padding: 12px 24px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-logout-premium:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #b23b3b;
+            color: #b23b3b;
+        }
+
+        /* Search Box */
+        .search-box-premium {
+            margin-bottom: 30px;
+        }
+
+        .search-input-premium {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(8px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            padding: 18px 24px;
+            width: 100%;
+            font-size: 16px;
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .search-input-premium::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .search-input-premium:focus {
+            outline: none;
+            border-color: #c7a03a;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 5px rgba(199, 160, 58, 0.15);
+        }
+
+        /* Filter Badges */
+        .filter-container-premium {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .filter-badge-premium {
+            display: inline-block;
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(4px);
+            border-radius: 40px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-badge-premium:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(199, 160, 58, 0.5);
+        }
+
+        .filter-badge-premium.active {
+            background: #c7a03a;
+            color: #0f2b3d;
+            border-color: #c7a03a;
+            font-weight: 600;
+            box-shadow: 0 8px 16px -6px rgba(199, 160, 58, 0.4);
+        }
+
+        /* Section Title */
+        .section-title-premium {
+            margin-bottom: 20px;
+        }
+
+        .section-title-premium h3 {
+            font-size: 1.4rem;
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title-premium h3 i {
+            color: #c7a03a;
+        }
+
+        .result-count-premium {
+            color: #c7a03a;
+            margin-left: 10px;
+            font-size: 1rem;
+        }
+
+        /* Table Premium */
+        .table-responsive-premium {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(4px);
+            border-radius: 32px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            overflow-x: auto;
+        }
+
+        .kelas-table-premium {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .kelas-table-premium th {
+            text-align: left;
+            padding: 18px 16px;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 500;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .kelas-table-premium td {
+            padding: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .kelas-table-premium tbody tr {
+            transition: background 0.2s;
+        }
+
+        .kelas-table-premium tbody tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Status Badges */
+        .status-badge-premium {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .status-sudah-premium { 
+            background: rgba(44, 110, 73, 0.2); 
+            color: #4caf7a;
+            border-color: rgba(44, 110, 73, 0.3);
+        }
+        .status-belum-premium { 
+            background: rgba(196, 123, 46, 0.2); 
+            color: #e6a345;
+            border-color: rgba(196, 123, 46, 0.3);
+        }
+        .status-belum-kumpul-premium { 
+            background: rgba(178, 59, 59, 0.2); 
+            color: #ff6b6b;
+            border-color: rgba(178, 59, 59, 0.3);
+        }
+
+        /* Buttons */
+        .btn-nilai-premium {
+            padding: 8px 16px;
+            border-radius: 40px;
             border: none;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            margin-right: 5px;
         }
-        .btn-nilai-sudah { background: #2E7D32; color: white; }
-        .btn-nilai-belum { background: #F57F17; color: white; }
+
+        .btn-nilai-sudah-premium { 
+            background: rgba(44, 110, 73, 0.3); 
+            color: #4caf7a;
+            border: 1px solid rgba(44, 110, 73, 0.3);
+        }
+        .btn-nilai-sudah-premium:hover { 
+            background: #2c6e49; 
+            color: white;
+        }
+
+        .btn-nilai-belum-premium { 
+            background: rgba(196, 123, 46, 0.3); 
+            color: #e6a345;
+            border: 1px solid rgba(196, 123, 46, 0.3);
+        }
+        .btn-nilai-belum-premium:hover { 
+            background: #c47b2e; 
+            color: white;
+        }
+
+        .btn-hapus-premium {
+            background: rgba(178, 59, 59, 0.3);
+            color: #ff6b6b;
+            border: 1px solid rgba(178, 59, 59, 0.3);
+            border-radius: 40px;
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-hapus-premium:hover {
+            background: #b23b3b;
+            color: white;
+        }
+
+        /* Pagination */
+        .pagination-premium {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .btn-page-premium {
+            padding: 12px 28px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 40px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-page-premium:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #c7a03a;
+            color: #c7a03a;
+        }
+
+        .btn-page-premium:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .page-info-premium {
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .footer-dashboard-premium {
+            text-align: center;
+            margin-top: 48px;
+            padding-top: 24px;
+            border-top: 2px solid rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.9rem;
+        }
+
+        .link-tugas-premium {
+            color: #c7a03a;
+            text-decoration: none;
+        }
+
+        .link-tugas-premium:hover {
+            text-decoration: underline;
+        }
+
+        .loading-premium {
+            text-align: center;
+            padding: 40px;
+            color: rgba(255, 255, 255, 0.5);
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .admin-dark-container {
+                padding: 20px;
+            }
+            
+            .kelas-table-premium th,
+            .kelas-table-premium td {
+                padding: 12px 8px;
+                font-size: 0.9rem;
+            }
+            
+            .btn-nilai-premium, .btn-hapus-premium {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+        }
     </style>
 </head>
-<body class="bg-soft">
-    <div class="dashboard-container">
-        <header class="admin-header">
-            <div class="header-left">
-                <img src="assets/logo.png" alt="Logo" class="logo-small">
+<body class="admin-dark-body">
+    <div class="admin-dark-container">
+        <!-- Header -->
+        <header class="admin-header-premium">
+            <div class="header-left-premium">
+                <div class="logo-glow-small">
+                    <i class="fas fa-search"></i>
+                </div>
                 <div>
-                    <h2>👥 CEK KELAS</h2>
+                    <h2>CEK KELAS</h2>
                     <p>MTs Darul Ulum Cimahpar · UKK 2026</p>
                 </div>
             </div>
-            <div class="header-right">
-                <button id="btn-back" class="btn-logout" onclick="window.location.href='admin-dashboard.html'">
+            <div class="header-right-premium">
+                <button id="btn-back" class="btn-back-premium" onclick="window.location.href='admin-dashboard.html'">
                     <i class="fas fa-arrow-left"></i> Kembali
                 </button>
-                <button id="btn-logout-admin" class="btn-logout">
+                <button id="btn-logout-admin" class="btn-logout-premium">
                     <i class="fas fa-sign-out-alt"></i> Keluar
                 </button>
             </div>
         </header>
         
         <!-- Search Box -->
-        <div class="search-box">
+        <div class="search-box-premium">
             <div class="input-group">
-                <label for="search-murid"><i class="fas fa-search"></i> Cari Murid</label>
-                <input type="text" id="search-murid" placeholder="Ketik nama murid..." autocomplete="off">
+                <input type="text" id="search-murid" class="search-input-premium" placeholder="🔍 Cari nama murid..." autocomplete="off">
             </div>
         </div>
         
         <!-- Filter Kelas -->
-        <div class="section-title">
-            <h3>🏷️ Filter Kelas</h3>
+        <div class="section-title-premium">
+            <h3><i class="fas fa-tags"></i> Filter Kelas</h3>
         </div>
-        <div id="filter-kelas-container" class="filter-container">
-            <span class="filter-badge active" data-kelas="all">Semua Kelas</span>
-            <span class="filter-badge" data-kelas="7A">7A</span>
-            <span class="filter-badge" data-kelas="7B">7B</span>
-            <span class="filter-badge" data-kelas="7C">7C</span>
-            <span class="filter-badge" data-kelas="7D">7D</span>
-            <span class="filter-badge" data-kelas="8A">8A</span>
-            <span class="filter-badge" data-kelas="8B">8B</span>
-            <span class="filter-badge" data-kelas="8C">8C</span>
-            <span class="filter-badge" data-kelas="8D">8D</span>
-            <span class="filter-badge" data-kelas="8E">8E</span>
+        <div id="filter-kelas-container" class="filter-container-premium">
+            <span class="filter-badge-premium active" data-kelas="all">Semua Kelas</span>
+            <span class="filter-badge-premium" data-kelas="7A">7A</span>
+            <span class="filter-badge-premium" data-kelas="7B">7B</span>
+            <span class="filter-badge-premium" data-kelas="7C">7C</span>
+            <span class="filter-badge-premium" data-kelas="7D">7D</span>
+            <span class="filter-badge-premium" data-kelas="8A">8A</span>
+            <span class="filter-badge-premium" data-kelas="8B">8B</span>
+            <span class="filter-badge-premium" data-kelas="8C">8C</span>
+            <span class="filter-badge-premium" data-kelas="8D">8D</span>
+            <span class="filter-badge-premium" data-kelas="8E">8E</span>
         </div>
         
         <!-- Hasil Pencarian -->
-        <div class="section-title">
-            <h3>📋 Hasil <span id="result-count"></span></h3>
+        <div class="section-title-premium">
+            <h3><i class="fas fa-list"></i> Hasil <span id="result-count" class="result-count-premium"></span></h3>
         </div>
         
-        <div class="table-responsive">
-            <table class="kelas-table" id="murid-table">
+        <div class="table-responsive-premium">
+            <table class="kelas-table-premium" id="murid-table">
                 <thead>
                     <tr>
                         <th>No</th>
@@ -108,19 +486,19 @@
                     </tr>
                 </thead>
                 <tbody id="murid-list-body">
-                    <tr><td colspan="6" class="loading">Memuat data...</td></tr>
+                    <tr><td colspan="6" class="loading-premium">Memuat data...</td></tr>
                 </tbody>
             </table>
         </div>
         
         <!-- Pagination -->
-        <div class="pagination" id="pagination">
-            <button class="btn-page" id="prev-page" disabled>◀ Prev</button>
-            <span id="page-info">Halaman 1</span>
-            <button class="btn-page" id="next-page">Next ▶</button>
+        <div class="pagination-premium" id="pagination">
+            <button class="btn-page-premium" id="prev-page" disabled>◀ Prev</button>
+            <span id="page-info" class="page-info-premium">Halaman 1</span>
+            <button class="btn-page-premium" id="next-page">Next ▶</button>
         </div>
         
-        <footer class="footer-dashboard">
+        <footer class="footer-dashboard-premium">
             <p>developed by mochamad anugrah saputra</p>
         </footer>
     </div>
@@ -151,9 +529,9 @@
             });
             
             // Filter kelas click
-            document.querySelectorAll('.filter-badge').forEach(badge => {
+            document.querySelectorAll('.filter-badge-premium').forEach(badge => {
                 badge.addEventListener('click', function() {
-                    document.querySelectorAll('.filter-badge').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.filter-badge-premium').forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
                     currentFilterKelas = this.dataset.kelas;
                     currentPage = 1;
@@ -188,7 +566,6 @@
         });
         
         function loadData() {
-            // Load semua murid dengan listener real-time
             db.collection('murid').onSnapshot((snapshot) => {
                 allMurid = [];
                 snapshot.docs.forEach(doc => {
@@ -202,25 +579,17 @@
         }
         
         function filterData() {
-            // Filter berdasarkan kelas dan search term
             filteredMurid = allMurid.filter(murid => {
-                // Filter kelas
                 if (currentFilterKelas !== 'all' && murid.kelas !== currentFilterKelas) {
                     return false;
                 }
-                
-                // Filter search
                 if (searchTerm && !murid.nama.toLowerCase().includes(searchTerm)) {
                     return false;
                 }
-                
                 return true;
             });
             
-            // Update result count
             document.getElementById('result-count').innerText = `(${filteredMurid.length} murid)`;
-            
-            // Reset ke halaman 1
             currentPage = 1;
             renderTable();
         }
@@ -229,31 +598,27 @@
             const tbody = document.getElementById('murid-list-body');
             
             if (filteredMurid.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="loading">Tidak ada data</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" class="loading-premium">Tidak ada data</td></tr>';
                 document.getElementById('pagination').style.display = 'none';
                 return;
             }
             
             document.getElementById('pagination').style.display = 'flex';
             
-            // Pagination
             const start = (currentPage - 1) * itemsPerPage;
             const end = start + itemsPerPage;
             const pageData = filteredMurid.slice(start, end);
             
-            // Update page info
             const totalPages = Math.ceil(filteredMurid.length / itemsPerPage);
             document.getElementById('page-info').innerText = `Halaman ${currentPage} dari ${totalPages}`;
             document.getElementById('prev-page').disabled = currentPage === 1;
             document.getElementById('next-page').disabled = currentPage === totalPages;
             
-            // Render rows
             let html = '';
             for (let i = 0; i < pageData.length; i++) {
                 const murid = pageData[i];
                 const index = start + i + 1;
                 
-                // Cek status pengumpulan dan nilai
                 const status = await getStatusMurid(murid.id, murid.kelas);
                 
                 let statusHtml = '';
@@ -261,27 +626,30 @@
                 
                 if (!status.adaPengumpulan) {
                     statusHtml = '❌ Belum Kumpul';
-                    statusClass = 'status-belum-kumpul';
+                    statusClass = 'status-belum-kumpul-premium';
                 } else if (!status.adaNilai) {
                     statusHtml = '⏳ Perlu Dinilai';
-                    statusClass = 'status-belum';
+                    statusClass = 'status-belum-premium';
                 } else {
                     statusHtml = `✅ Sudah (${status.nilai})`;
-                    statusClass = 'status-sudah';
+                    statusClass = 'status-sudah-premium';
                 }
                 
                 html += `<tr>
                     <td>${index}</td>
-                    <td><strong>${murid.nama}</strong></td>
+                    <td><strong style="color:white;">${murid.nama}</strong></td>
                     <td>${murid.kelas}</td>
-                    <td><span class="status-badge ${statusClass}">${statusHtml}</span></td>
+                    <td><span class="status-badge-premium ${statusClass}">${statusHtml}</span></td>
                     <td>
-                        ${status.link ? `<a href="${status.link}" target="_blank" class="link-tugas">🔗 Lihat</a>` : '-'}
+                        ${status.link ? `<a href="${status.link}" target="_blank" class="link-tugas-premium">🔗 Lihat</a>` : '-'}
                     </td>
                     <td>
-                        <button class="btn-nilai ${status.adaNilai ? 'btn-nilai-sudah' : 'btn-nilai-belum'}" 
+                        <button class="btn-nilai-premium ${status.adaNilai ? 'btn-nilai-sudah-premium' : 'btn-nilai-belum-premium'}" 
                                 onclick="openNilai('${murid.id}', '${murid.nama}', '${murid.kelas}', '${status.link || ''}')">
                             ${status.adaNilai ? '✏️ Edit' : '📝 Nilai'}
+                        </button>
+                        <button class="btn-hapus-premium" onclick="hapusUser('${murid.id}', '${murid.nama}')">
+                            🗑️
                         </button>
                     </td>
                 </tr>`;
@@ -292,7 +660,6 @@
         
         async function getStatusMurid(muridId, kelas) {
             try {
-                // Cek pengumpulan
                 const pengumpulanSnap = await db.collection('pengumpulan')
                     .where('murid_id', '==', muridId)
                     .orderBy('created_at', 'desc')
@@ -302,7 +669,6 @@
                 const adaPengumpulan = !pengumpulanSnap.empty;
                 const link = adaPengumpulan ? pengumpulanSnap.docs[0].data().link : '';
                 
-                // Cek nilai
                 const nilaiSnap = await db.collection('nilai')
                     .where('murid_id', '==', muridId)
                     .get();
@@ -317,14 +683,53 @@
             }
         }
         
+        async function hapusUser(muridId, namaMurid) {
+            const confirm = window.confirm(`⚠️ Yakin ingin menghapus ${namaMurid}?\n\nSemua data pengumpulan dan nilai juga akan ikut terhapus!`);
+            if (!confirm) return;
+            
+            try {
+                const pengumpulanSnap = await db.collection('pengumpulan')
+                    .where('murid_id', '==', muridId)
+                    .get();
+                
+                const batch = db.batch();
+                
+                pengumpulanSnap.docs.forEach(doc => {
+                    batch.delete(doc.ref);
+                });
+                
+                const nilaiSnap = await db.collection('nilai')
+                    .where('murid_id', '==', muridId)
+                    .get();
+                
+                nilaiSnap.docs.forEach(doc => {
+                    batch.delete(doc.ref);
+                });
+                
+                const muridRef = db.collection('murid').doc(muridId);
+                batch.delete(muridRef);
+                
+                await batch.commit();
+                
+                await db.collection('log_aktivitas').add({
+                    aksi: 'hapus',
+                    detail: `Admin menghapus user: ${namaMurid}`,
+                    waktu: new Date().toLocaleString('id-ID')
+                });
+                
+                alert(`✅ User ${namaMurid} berhasil dihapus!`);
+                
+            } catch (error) {
+                console.error(error);
+                alert('Gagal menghapus: ' + error.message);
+            }
+        }
+        
         function openNilai(muridId, nama, kelas, link) {
-            // Simpan ke sessionStorage
             sessionStorage.setItem('nilai_murid_id', muridId);
             sessionStorage.setItem('nilai_nama', nama);
             sessionStorage.setItem('nilai_kelas', kelas);
             sessionStorage.setItem('nilai_link', link);
-            
-            // Buka halaman input nilai
             window.location.href = 'admin-nilai.html';
         }
     </script>
